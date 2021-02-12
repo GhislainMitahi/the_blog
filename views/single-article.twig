@@ -1,0 +1,13 @@
+{% extends "layout.twig" %}
+
+{% block body %}
+<div class="" style="width: 100%;">
+    <img src="{{ article.image }}" width="1800" height="400" class="card-img-top" alt="{{article.name}}">
+    <div class="card-body">
+        <h3>{{ article.title}}</h3>
+        <a href="">Published At  {{ article.publishedAt | date("d/m/Y")}}</a>
+      <p class="card-text">{{ article.content}}</p>
+      
+    </div>
+  </div>
+{% endblock %}
