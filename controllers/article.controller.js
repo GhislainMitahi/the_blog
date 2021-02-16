@@ -8,7 +8,7 @@ exports.list = (req, res)=>{
     res.render('index', { title: 'Express', articles: articles })
   })
   .catch((err)=>{
-    res.status(200).json(err);
+    res.status(500).json(err);
   });
 }
 
@@ -70,4 +70,5 @@ exports.show = (req, res)=>{
    
     
   }
+
 

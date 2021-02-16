@@ -1,5 +1,8 @@
 var createError = require('http-errors');
 var express = require('express');
+const session = require('express-session');
+const flash = require('message-flash');
+
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -37,6 +40,13 @@ for (let index = 0; index < 8; index++) {
   
 }
 
+app.use(session({
+  secret: 'This is very secret',
+  resave: false,
+  saveUninitialized: true
+}))
+
+app.use(flash);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
