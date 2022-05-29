@@ -41,14 +41,14 @@ exports.show = (req, res)=>{
     var article = new Article({
       ...req.body,
       image: `${req.protocol}://${req.get('host')}/images/articles/${req.file.filename}`,
-      publishedAt: Date.now()
+      publishedAt:  Date.now()
     });
 
    article.save((err, article)=>{
       if(err){
-        console.log(err);
+        // console.log(err);
         Category.find()
-        .then((categories)=>{
+        .then((categories)=>{ 
           res.render('add-article', {categories: categories,error: "Sorry, an error has occurred. Thank you try again later"});
         })
         .catch(()=>{
@@ -56,7 +56,7 @@ exports.show = (req, res)=>{
         });
         
       }else{
-        console.log(article);
+        // console.log(article);
         Category.find()
         .then((categories)=>{
           res.render('add-article', {categories: categories,success: "Thank you, your article has been added"})

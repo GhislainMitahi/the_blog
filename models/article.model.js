@@ -9,3 +9,13 @@ const articleSchema = mongoose.Schema({
 });
 
 module.exports = mongoose.model('Article', articleSchema);
+
+
+
+// const articleSchema = mongoose.Schema({
+//     title: String,
+//     content: String,
+//     category: String,
+//     image: String,
+//     publishedAt: Date
+// });

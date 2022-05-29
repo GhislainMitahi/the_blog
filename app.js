@@ -2,43 +2,19 @@ var createError = require('http-errors');
 var express = require('express');
 const session = require('express-session');
 const flash = require('message-flash');
-
+// var flash = require('connect-flash');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const Article = require('./models/article.model');
-const Category = require('./models/category.model');
-
 var indexRouter = require('./routes/index.route');
 var usersRouter = require('./routes/users.route');
-
+const mongoose = require('mongoose');
 var app = express();
 
-
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/blog', 
+mongoose.connect('mongodb://localhost:27017/blog',
   {useNewUrlParser: true, useUnifiedTopology: true})
   .then(()=>console.log("Connexion à MongoDB réussie"))
   .catch(()=> console.log("Echec de connexion à mongoDB"));
-
-for (let index = 0; index < 8; index++) {
-  article = new Article({
-    title: 'Qu\'est-ce que le Lorem Ipsum?',
-    content: 'Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l\'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n\'a pas fait que survivre cinq siècles, mais s\'est aussi adapté à la bureautique informatique, sans que son contenu n\'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.',
-    publishedAt: Date.now()
-  })
-  //article.save();
-  
-}
-
-for (let index = 0; index < 8; index++) {
-  category = new Category({
-    title: 'Category '+index,
-    description: 'Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l\'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n\'a pas fait que survivre cinq siècles, mais s\'est aussi adapté à la bureautique informatique, sans que son contenu n\'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.'
-  })
-  //category.save();
-  
-}
 
 app.use(session({
   secret: 'This is very secret',
