@@ -26,6 +26,8 @@
       </nav>
     </header>
     <div class="container mt-3 ">
+    {% if success %}  <div class="alert alert-success">{{ success}}</div> {% endif %}
+    {% if error %}  <div class="alert alert-danger">{{ error}}</div> {% endif %}
       {% block body %}{% endblock %}
     </div>
   </body>

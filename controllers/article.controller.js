@@ -5,6 +5,7 @@ exports.list = (req, res)=>{
     Article.find()
   .then((articles)=>{
     //res.status(200).json(articles);
+    req.flash('success', 'Test ok');
     res.render('index', { title: 'Express', articles: articles })
   })
   .catch((err)=>{
@@ -28,7 +29,8 @@ exports.show = (req, res)=>{
   exports.add = (req, res)=>{
       Category.find()
       .then((categories)=>{
-        res.render('add-article',{categories: categories});
+        res.render('add-article',
+        {categories: categories})
       })
       .catch(()=>{
           res.redirect('/');
@@ -46,29 +48,32 @@ exports.show = (req, res)=>{
 
    article.save((err, article)=>{
       if(err){
-        // console.log(err);
-        Category.find()
-        .then((categories)=>{ 
-          res.render('add-article', {categories: categories,error: "Sorry, an error has occurred. Thank you try again later"});
-        })
-        .catch(()=>{
-          res.redirect('/');
-        });
-        
-      }else{
-        // console.log(article);
-        Category.find()
-        .then((categories)=>{
-          res.render('add-article', {categories: categories,success: "Thank you, your article has been added"})
-        })
-        .catch(()=>{
-          res.redirect('/');
-        });
-       
-      }
+        req.flash('error', 'Sorry, an error has occurred. Thank you try again later')
+        return res.redirect('/add-article');
+    }
+    req.flash('success', 'Thank you, your article has been added')
+    return res.redirect('/add-article');
+
     });
    
     
   }
 
 
+//   Category.find()
+//   .then((categories)=>{ 
+//     res.render('add-article', {categories: categories,error: "Sorry, an error has occurred. Thank you try again later"});
+//   })
+//   .catch(()=>{
+//     res.redirect('/');
+//   });
+  
+// }else{
+//   // console.log(article);
+//   Category.find()
+//   .then((categories)=>{
+//     res.render('add-article', {categories: categories,success: "Thank you, your article has been added"})
+//   })
+//   .catch(()=>{
+//     res.redirect('/');
+//   });

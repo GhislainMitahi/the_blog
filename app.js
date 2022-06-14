@@ -1,7 +1,7 @@
 var createError = require('http-errors');
 var express = require('express');
-const session = require('express-session');
-const flash = require('message-flash');
+var session = require('express-session');
+const flash = require('connect-flash');
 // var flash = require('connect-flash');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -9,20 +9,29 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index.route');
 var usersRouter = require('./routes/users.route');
 const mongoose = require('mongoose');
-var app = express();
 
-mongoose.connect('mongodb://localhost:27017/blog',
-  {useNewUrlParser: true, useUnifiedTopology: true})
-  .then(()=>console.log("Connexion à MongoDB réussie"))
-  .catch(()=> console.log("Echec de connexion à mongoDB"));
+var app = express();
 
 app.use(session({
   secret: 'This is very secret',
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: false
 }))
 
-app.use(flash);
+mongoose.connect('mongodb://localhost:27017/blog',
+  {useNewUrlParser: true, useUnifiedTopology: true})
+  .then(()=>console.log("Connexion à MongoDB réussie"))
+  .catch(()=> console.log("Echec de connexion à mongoDB"))
+
+
+
+app.use(flash());
+
+app.use((req,res,next) => {
+  res.locals.error = req.flash('error');
+  res.locals.success = req.flash('success');
+  next();
+})
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
