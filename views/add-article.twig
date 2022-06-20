@@ -3,6 +3,28 @@
 {% block body %}
 
     <h1 class="text-center">Add your article !</h1>
+    {% if errorForm %}
+         <p class="text-danger">Please fix the following error</p>
+        <ul class="errors">
+            {% for error in errorForm %}
+                 {% if error.title %}
+                 <li> {{ error.title.message }}</li>
+                 {% endif %}
+
+                  {% if error.category %}
+                 <li> {{ error.category.message }}</li>
+                 {% endif %}
+
+                  {% if error.content %}
+                 <li> {{ error.content.message }}</li>
+                 {% endif %}
+
+                  {% if error.image %}
+                 <li> {{ error.image.message }}</li>
+                 {% endif %}
+            {% endfor %}
+        </ul>
+    {% endif %}
     <form action="" method="POST" enctype="multipart/form-data"> 
         <div class="form-group">
             <label for="">Title :</label>
@@ -30,4 +52,12 @@
         </div>
         <button class="btn btn-success mt-3">Add Article</button>
     </form>
+   <script src="https://cdn.ckeditor.com/ckeditor5/34.1.0/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create( document.querySelector( '#content' ) )
+            .catch( error => {
+                console.error( error );
+            } );
+    </script>
 {% endblock %}

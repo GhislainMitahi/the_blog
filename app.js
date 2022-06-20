@@ -2,34 +2,45 @@ var createError = require('http-errors');
 var express = require('express');
 var session = require('express-session');
 const flash = require('connect-flash');
-// var flash = require('connect-flash');
+var passport = require('passport');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var indexRouter = require('./routes/index.route');
 var usersRouter = require('./routes/users.route');
 const mongoose = require('mongoose');
+const User = require('./models/users.model')
 
 var app = express();
-
-app.use(session({
-  secret: 'This is very secret',
-  resave: false,
-  saveUninitialized: false
-}))
 
 mongoose.connect('mongodb://localhost:27017/blog',
   {useNewUrlParser: true, useUnifiedTopology: true})
   .then(()=>console.log("Connexion à MongoDB réussie"))
   .catch(()=> console.log("Echec de connexion à mongoDB"))
 
+  app.use(session({
+    secret: 'This is very secret',
+    resave: false,
+    saveUninitialized: false
+  }))
 
-
+// init flash
 app.use(flash());
+
+// init passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+// passport local mongoose
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 
 app.use((req,res,next) => {
   res.locals.error = req.flash('error');
   res.locals.success = req.flash('success');
+  res.locals.errorForm = req.flash('errorForm')
   next();
 })
 

@@ -1,0 +1,64 @@
+{% extends "layout.twig" %}
+
+{% block body %}
+
+
+<h1> SinUp </h1>
+{% if errorForm %}
+         <p class="text-danger">Please fix the following error</p>
+        <ul class="errors">
+            {% for error in errorForm %}
+                 {% if error.userName %}
+                 <li> {{ error.userName.message }}</li>
+                 {% endif %}
+
+                  {% if error.firstName %}
+                 <li> {{ error.firstName.message }}</li>
+                 {% endif %}
+
+                  {% if error.lastName %}
+                 <li> {{ error.lastName.message }}</li>
+                 {% endif %}
+
+                  {% if error.email %}
+                 <li> {{ error.email.message }}</li>
+                 {% endif %}
+
+                  {% if error.password %}
+                 <li> {{ error.password.message }}</li>
+                 {% endif %}
+
+                 {% if error.passwordConfirm %}
+                 <li> {{ error.passwordConfirm.message }}</li>
+                 {% endif %}
+             {% endfor %}
+            {% endif %}
+    <form action="" method="POST">
+       <div class="form-group">
+           <label class="" for="userName"> Username : </label>
+           <input type="text" id="userName" value="nodejs" name="userName" placeholder="" class="form-control">
+       </div>
+       <div class="form-group">
+           <label class="" for="firstName"> LastName : </label>
+           <input type="text" id="firstName" value="firstName" name="firstName" placeholder="" class="form-control">
+       </div>
+        <div class="form-group">
+           <label class="" for="lastName"> LastName : </label>
+           <input type="text" id="lastName" value="lastName" name="lastName" placeholder="" class="form-control">
+       </div>
+       <div class="form-group">
+           <label class="" for="email"> Email : </label>
+           <input type="text" id="email" value="email" name="email" placeholder="" class="form-control">
+       </div>
+            <div class="form-group">
+           <label class="" for="password"> password : </label>
+           <input type="password" id="password" name="password" placeholder="" class="form-control">
+       </div>
+       <div class="form-group">
+           <label class="" for="password-confirm">repeat password : </label>
+           <input type="password" id="password-confirm" name="passwordConfirm" placeholder="" class="form-control">
+       </div>
+       <button type="submit" class="btn btn-success mt-3">sign Up</button>
+    </form>
+
+{% endblock body %}

@@ -1,7 +1,8 @@
 const Article = require('../models/article.model');
 const Category = require('../models/category.model');
+const fs = require('fs')
 
-exports.list = (req, res)=>{
+exports.listArticle = (req, res)=>{
     Article.find()
   .then((articles)=>{
     //res.status(200).json(articles);
@@ -13,7 +14,7 @@ exports.list = (req, res)=>{
   });
 }
 
-exports.show = (req, res)=>{
+exports.showArticle = (req, res)=>{
     //console.log(req.params.id);
     Article.findOne({_id: req.params.id})
     .then((article)=>{
@@ -26,7 +27,7 @@ exports.show = (req, res)=>{
     });
   }
 
-  exports.add = (req, res)=>{
+  exports.addArticle = (req, res)=>{
       Category.find()
       .then((categories)=>{
         res.render('add-article',
@@ -38,7 +39,7 @@ exports.show = (req, res)=>{
       
   }
 
-  exports.addOne = (req, res)=>{
+  exports.addOneArticle = (req, res)=>{
    
     var article = new Article({
       ...req.body,
@@ -52,13 +53,61 @@ exports.show = (req, res)=>{
         return res.redirect('/add-article');
     }
     req.flash('success', 'Thank you, your article has been added')
-    return res.redirect('/add-article');
+    return res.redirect("/add-article");
 
     });
    
     
   }
 
+  exports.editArticle = (req, res) => {
+    const id = req.params.id;
+    Article.findOne({_id: id}, (err, article)=>{
+if(err){
+  req.flash('error', err.message);
+  return res.redirect('/');
+}
+Category.find((err, categories)=>{
+  if(err){
+    req.flash(error, err.message);
+  }
+  return res.render('edit-article', {categories: categories, article: article});
+})
+    })
+  }
+
+  exports.editOneArticle = (req, res) => {
+    const id = req.params.id;
+       Article.findOne({_id: id}, (err, article)=>{
+         if(err){
+           req.flash('error', err.message);
+           return res.redirect("/edit-article/"+id);
+         }
+
+         if(req.file){
+          console.log("le voici : " + req.file);
+          const filename = article.image.split('/articles/')[1];
+          fs.unlink(`pubic/images/articles/${filename}`,()=>{
+            console.log('Deleted : '+filename);
+          })
+      }
+
+         article.title = req.body.title ? req.body.title : article.title;
+         article.category = req.body.category ? req.body.category : article.category;
+         article.content = req.body.content ? req.body.content : article.content;
+         article.image = req.file ? `${req.protocol}://${req.get('host')}/images/articles/${req.file.filename}` : article.image;
+       
+  article.save((err, article) => {
+    if(err){
+      req.flash('error', err.message);
+      return res.redirect('/edit-article/'+id);
+    }
+
+    req.flash('success', 'Cool, the article has been edited !');
+    return res.redirect('/edit-article/'+id);
+  })
+})
+}
 
 //   Category.find()
 //   .then((categories)=>{ 
